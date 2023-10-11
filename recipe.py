@@ -2,13 +2,30 @@
 import sys
 from os import path
 
+from bs4 import BeautifulSoup
+
 
 def parse(html):
     ''' return a list of dict {name, difficulty, prep_time} '''
+    list_dicts = []
+    soup = BeautifulSoup(open("pages/carrot.html"), "html.parser")
+    for recipe_name in soup.find_all('p', class_= 'recipe-name'):
+        article = soup.find(text=recipe_name.text).parent.parent
+        list_dicts.append(parse_recipe(article))
+    return list_dicts
+
     pass  # YOUR CODE HERE
 
 def parse_recipe(article):
     ''' return a dict {name, difficulty, prep_time} modeling a recipe'''
+    dict_recipe = {'name':'', 'difficulty':'', 'prep_time':''}
+
+    #for recipe_name in article.find_all('p', class_= 'recipe-name'):
+    dict_recipe['name'] = article.find_all('p', class_= 'recipe-name')
+    dict_recipe['difficulty'] = article.find_all('span', class_= 'recipe-difficulty')[0].text
+    dict_recipe['prep_time'] = article.find_all('span', class_= 'recipe-cooktime')[0].text
+    return dict_recipe
+
     pass  # YOUR CODE HERE
 
 def write_csv(ingredient, recipes):

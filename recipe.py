@@ -9,9 +9,8 @@ def parse(html):
     ''' return a list of dict {name, difficulty, prep_time} '''
     list_dicts = []
     soup = BeautifulSoup(open("pages/carrot.html"), "html.parser")
-    for recipe_name in soup.find_all('p', class_= 'recipe-name'):
-        article = soup.find(text=recipe_name.text).parent.parent
-        list_dicts.append(parse_recipe(article))
+    for div in soup.find_all("div", class_="col-12 col-sm-6 col-md-4 col-lg-3"):
+        list_dicts.append(parse_recipe(div))
     return list_dicts
 
     pass  # YOUR CODE HERE
@@ -20,8 +19,7 @@ def parse_recipe(article):
     ''' return a dict {name, difficulty, prep_time} modeling a recipe'''
     dict_recipe = {'name':'', 'difficulty':'', 'prep_time':''}
 
-    #for recipe_name in article.find_all('p', class_= 'recipe-name'):
-    dict_recipe['name'] = article.find_all('p', class_= 'recipe-name')
+    dict_recipe['name'] = article.find_all('p', class_= 'recipe-name')[0].text
     dict_recipe['difficulty'] = article.find_all('span', class_= 'recipe-difficulty')[0].text
     dict_recipe['prep_time'] = article.find_all('span', class_= 'recipe-cooktime')[0].text
     return dict_recipe
@@ -30,6 +28,7 @@ def parse_recipe(article):
 
 def write_csv(ingredient, recipes):
     ''' dump recipes to a CSV file `recipes/INGREDIENT.csv` '''
+
     pass  # YOUR CODE HERE
 
 def scrape_from_internet(ingredient, start=1):
